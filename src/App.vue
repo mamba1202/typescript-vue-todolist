@@ -21,13 +21,18 @@ interface Todo {
   components: {
     NewTodo,
     TodoList
+  },
+  watch: {
+    list(newValue: Array<Todo>) {
+      let string = JSON.stringify(newValue);
+      localStorage.setItem("data", string);
+    }
   }
 })
 export default class App extends Vue {
-  list: Array<Todo> = [
-    { name: "任务一", status: "todo" },
-    { name: "任务二", status: "done" }
-  ];
+  list: Array<Todo> = localStorage.getItem("data")
+    ? JSON.parse(<string>localStorage.getItem("data"))
+    : [];
   addTodo(name: String) {
     let todo: Todo = { name: name, status: "todo" }; //注意声明类型
     this.list.push(todo);
